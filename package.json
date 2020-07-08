@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "YouTubeビデオの再生をするウインドウを生成します。サイズ更新も可能です。",
   "main": "js/entry.js",
-  "dependencies": {},
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.1",
+    "izimodal": "^1.5.1",
+    "jquery": "^3.5.1"
+  },
   "devDependencies": {
     "nw": "^0.46.3"
   },

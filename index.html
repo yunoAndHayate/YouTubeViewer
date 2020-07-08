@@ -4,11 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Viewer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="node_modules/izimodal/css/iziModal.min.css">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
     <main>
-        <iframe src="https://www.youtube.com/embed/9u8uQTFMEPk" frameborder="0" allowfullscreen=""></iframe>
+        <div id="player"></div>
     </main>
+
+    <a
+        href="#"
+        data-izimodal-open="#modal"
+        data-izimodal-transitionin="fadeInDown"
+        class="menu-button button is-large"
+    >
+        <span class="icon is-medium">
+            <i class="fa fa-bars fa-2x"></i>
+        </span>
+    </a>
+
+    <div id="modal"
+        data-iziModal-openFullscreen="true"
+        data-iziModal-title="Menu"
+        data-iziModal-icon="icon-home"
+    >
+        <div class="content px-3 py-3">
+            <h3>動画を選択</h3>
+            <input
+                class="input"
+                type="text"
+                placeholder="Input YouTube Video URL!"
+            >
+        </div>
+    </div>
+
+    <div class="grip">
+        <span class="icon is-large fa-stack fa-lg">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-grip-lines fa-stack-1x fa-inverse"></i>
+        </span>
+    </div>
+
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+    <script src="node_modules/izimodal/js/iziModal.min.js"></script>
+    <script src="./js/player.js"></script>
+    <script>
+        $("#modal").iziModal();
+    </script>
 </body>
 </html>
