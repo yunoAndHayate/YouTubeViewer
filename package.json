@@ -1,0 +1,15 @@
+{
+  "name": "youtube_viewer",
+  "version": "1.0.0",
+  "description": "YouTubeビデオの再生をするウインドウを生成します。サイズ更新も可能です。",
+  "main": "js/entry.js",
+  "dependencies": {},
+  "devDependencies": {
+    "nw": "^0.46.3"
+  },
+  "scripts": {
+    "start": "nw"
+  },
+  "author": "yuno_and_hayate",
+  "license": "MIT"
+}
