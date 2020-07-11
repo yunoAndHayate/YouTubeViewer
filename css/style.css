@@ -18,6 +18,10 @@ iframe {
     height: 100%;
 }
 #modal {
+    background-color: rgba(10,10,10,.6);
+}
+#modal h3 {
+    color: whitesmoke;
 }
 .input {
     width: 80%;
