@@ -1,3 +1,4 @@
+var config = require('config');
 var video_id = 'M7lc1UVf-VE';
 
 // YouTube Javascript SDK の読み込み
@@ -17,7 +18,9 @@ function onYouTubeIframeAPIReady() {
         },
         events: {
             'onReady': function (params) { },
-            'onStateChange': function (params) { },
+            'onStateChange': function (e) {
+                if (e.data == 0 /* END */) onVideoEnd();
+            },
         },
     });
 
@@ -44,4 +47,35 @@ function onYouTubeIframeAPIReady() {
         $(this).select();
     });
 
+
+    // 動画の再生が完了したら、次の動画を検索して再生する
+    function onVideoEnd() {
+        var request = gapi.client.youtube.search.list({
+            part: 'id',
+            relatedToVideoId: video_id,
+            relevanceLanguage: 'ja',
+            type: 'video',
+            videoEmbeddable: true,
+        });
+
+        request.execute(function (response) {
+            // 現在再生している動画と違う動画に遷移する
+            response.result['items'].shift(); // 最初を捨てる
+            response.result['items'].some(element => { // 値を返すまで続くforEachみたいなの
+                if (video_id != element['id']['videoId']) {
+                    console.log(response.result['items']);
+                    player.loadVideoById(element['id']['videoId']);
+                    return video_id = element['id']['videoId'];
+                }
+            });
+        });
+    }
 }
+
+// YouTubeAPI の client library を初期化
+gapi.load('client', function () {
+    gapi.client.init({
+        'apiKey': config.get('NODE_YOUTUBE_API_KEY'),
+        'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
+    });
+});

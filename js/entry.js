@@ -4,3 +4,5 @@ nw.Window.open("../index.html", {
     height: 288,
     frame: false
 });
+
+console.log(config);

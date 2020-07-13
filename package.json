@@ -5,6 +5,7 @@
   "main": "js/entry.js",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.1",
+    "config": "^3.3.1",
     "izimodal": "^1.5.1",
     "jquery": "^3.5.1"
   },
