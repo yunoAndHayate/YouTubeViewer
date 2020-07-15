@@ -1,5 +1,5 @@
 var config = require('config');
-var video_id = 'M7lc1UVf-VE';
+var video_ids = ['M7lc1UVf-VE'];
 
 // YouTube Javascript SDK の読み込み
 var tag = document.createElement('script');
@@ -10,7 +10,7 @@ document.getElementsByTagName("body")[0].appendChild(tag);
 var player;
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
-        videoId: video_id,
+        videoId: getNowPlayingVideo(),
         playerVars: {
             rel: 0,
             enablejsapi: 1,
@@ -25,16 +25,16 @@ function onYouTubeIframeAPIReady() {
     });
 
     // inputに初期値を設定
-    $(".input").val("https://www.youtube.com/watch?v=" + video_id);
+    $(".input").val("https://www.youtube.com/watch?v=" + getNowPlayingVideo());
 
     // 動画の切り替え
     $('.input').on('change', function () {
         // value がYoutube Video URLの形式だったらその動画に遷移
-        video_id = $(this).val().match(/(\/embed\/|watch\?v=([^&]+))/);
-        if (video_id && video_id[2]) {
-            console.log('change video to ' + video_id[2] + ' !');
-
-            player.loadVideoById(video_id[2]);
+        match = $(this).val().match(/(\/embed\/|watch\?v=([^&]+))/);
+        if (match && match[2]) {
+            video_ids = [];
+            addHistory(match[2]);
+            loadVideo();
         }
         // TODO: そうでなければ単語検索
         else {
@@ -52,20 +52,20 @@ function onYouTubeIframeAPIReady() {
     function onVideoEnd() {
         var request = gapi.client.youtube.search.list({
             part: 'id',
-            relatedToVideoId: video_id,
+            relatedToVideoId: video_ids,
             relevanceLanguage: 'ja',
             type: 'video',
             videoEmbeddable: true,
         });
 
         request.execute(function (response) {
-            // 現在再生している動画と違う動画に遷移する
+            // 直近で再生していない動画に遷移する
             response.result['items'].shift(); // 最初を捨てる
             response.result['items'].some(element => { // 値を返すまで続くforEachみたいなの
-                if (video_id != element['id']['videoId']) {
-                    console.log(response.result['items']);
-                    player.loadVideoById(element['id']['videoId']);
-                    return video_id = element['id']['videoId'];
+                if (video_ids.indexOf(element['id']['videoId']) == -1) {
+                    addHistory(element['id']['videoId']);
+                    loadVideo();
+                    return 1;
                 }
             });
         });
@@ -79,3 +79,17 @@ gapi.load('client', function () {
         'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
     });
 });
+
+// 再生履歴に動画を追加。履歴は5つまで保存
+function addHistory(new_video_id) {
+    video_ids.push(new_video_id);
+    video_ids = video_ids.slice(-5);
+    console.log(video_ids);
+}
+function getNowPlayingVideo() {
+    return video_ids[video_ids.length -1];
+}
+function loadVideo() {
+    console.log('change video to ' + getNowPlayingVideo() + ' !');
+    player.loadVideoById(getNowPlayingVideo());
+}
