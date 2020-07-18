@@ -1,10 +1,14 @@
 var config = require('config');
 var video_ids = ['M7lc1UVf-VE'];
 
+var gui = require('nw.gui');
+var win = gui.Window.get();
+// win.showDevTools();
+
 // YouTube Javascript SDK の読み込み
 var tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-document.getElementsByTagName("body")[0].appendChild(tag);
+tag.src = 'https://www.youtube.com/iframe_api';
+document.getElementsByTagName('body')[0].appendChild(tag);
 
 // 動画プレイヤーの生成
 var player;
@@ -19,16 +23,18 @@ function onYouTubeIframeAPIReady() {
         events: {
             'onReady': function (params) { },
             'onStateChange': function (e) {
-                if (e.data == 0 /* END */) onVideoEnd();
+                if (e.data <= 0 /* END or ERROR */) onVideoEnd();
+                if (e.data == 1 || e.data == 3 /* PLAYING */) {}
+                if (e.data == 2 /* PAUSE */) {}
             },
         },
     });
 
     // inputに初期値を設定
-    $(".input").val("https://www.youtube.com/watch?v=" + getNowPlayingVideo());
+    $('#movie-name').val('https://www.youtube.com/watch?v=' + getNowPlayingVideo());
 
     // 動画の切り替え
-    $('.input').on('change', function () {
+    $('#movie-name').on('change', function () {
         // value がYoutube Video URLの形式だったらその動画に遷移
         match = $(this).val().match(/(\/embed\/|watch\?v=([^&]+))/);
         if (match && match[2]) {
@@ -43,8 +49,13 @@ function onYouTubeIframeAPIReady() {
         }
     });
     // inputへフォーカス時に全選択
-    $('.input').on('focus', function () {
+    $('#movie-name').on('focus', function () {
         $(this).select();
+    });
+
+    // 最前面表示の切り替え
+    $('#move-front').on('change', function () {
+        win.setAlwaysOnTop($(this).is(':checked'));
     });
 
 

@@ -12,40 +12,24 @@
 <body>
     <main>
         <div id="player"></div>
+        <div id="interface">
+            <div class="content px-3">
+                <p class="control has-icons-left">
+                    <input id="movie-name" type="text" placeholder="動画URLを貼りつけ">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-link"></i>
+                    </span>
+
+                    <label class="checkbox">
+                        <input id="move-front" type="checkbox" name="move-front" value="1">
+                        最前面へ表示
+                    </label>
+                </p>
+            </div>
+        </div>
     </main>
 
-    <a
-        href="#"
-        data-izimodal-open="#modal"
-        data-izimodal-transitionin="fadeInDown"
-        class="menu-button button is-large"
-    >
-        <span class="icon is-medium">
-            <i class="fa fa-bars fa-2x"></i>
-        </span>
-    </a>
-
-    <div id="modal"
-        data-iziModal-openFullscreen="true"
-        data-iziModal-title="Menu"
-        data-iziModal-icon="icon-home"
-    >
-        <div class="content px-3 py-3">
-            <h3 class="subtitle">動画URLを貼りつけ</h3>
-            <input
-                class="input"
-                type="text"
-                placeholder="Input YouTube Video URL!"
-            >
-        </div>
-    </div>
-
-    <div class="grip">
-        <span class="icon is-large fa-stack fa-lg">
-            <i class="fas fa-circle fa-stack-2x"></i>
-            <i class="fas fa-grip-lines fa-stack-1x fa-inverse"></i>
-        </span>
-    </div>
+    <div class="grip"></div>
 
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
