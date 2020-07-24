@@ -23,12 +23,7 @@ main:hover iframe{
 }
 main #interface {
     height: 30%;
-}
-#modal {
-    background-color: rgba(10,10,10,.6);
-}
-#modal h3 {
-    color: whitesmoke;
+    overflow-y: auto;
 }
 .input {
     width: 80%;

@@ -23,10 +23,14 @@ function onYouTubeIframeAPIReady() {
         events: {
             'onReady': function (params) { },
             'onStateChange': function (e) {
-                if (e.data <= 0 /* END or ERROR */) onVideoEnd();
-                if (e.data == 1 || e.data == 3 /* PLAYING */) {}
-                if (e.data == 2 /* PAUSE */) {}
+                console.log('State Changed to ' + e.data + '.');
+                if (e.data == 0 /* END */) onVideoEnd();
             },
+            'onError': function (e) {
+                // エラーが発生した場合に呼び出す。 動画の作成者が再生を許可していない、HTML5プレーヤーと互換性がないなど。
+                console.log(e);
+                onVideoEnd();
+            }
         },
     });
 
@@ -54,22 +58,24 @@ function onYouTubeIframeAPIReady() {
     });
 
     // 最前面表示の切り替え
-    $('#move-front').on('change', function () {
-        win.setAlwaysOnTop($(this).is(':checked'));
-    });
+    $('#move-front').on('change keyup', onMoveFrontPress);
+    onMoveFrontPress();
+    function onMoveFrontPress() {
+        win.setAlwaysOnTop($('#move-front').is(':checked'));
+    }
 
 
     // 動画の再生が完了したら、次の動画を検索して再生する
     function onVideoEnd() {
         var request = gapi.client.youtube.search.list({
             part: 'id',
-            relatedToVideoId: video_ids,
+            relatedToVideoId: getNowPlayingVideo(),
             relevanceLanguage: 'ja',
             type: 'video',
             videoEmbeddable: true,
         });
-
         request.execute(function (response) {
+            console.log(response);
             // 直近で再生していない動画に遷移する
             response.result['items'].shift(); // 最初を捨てる
             response.result['items'].some(element => { // 値を返すまで続くforEachみたいなの
